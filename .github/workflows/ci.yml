@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify project files
+        run: |
+          echo "Checking project files..."
+          ls -la
+          test -f index.html
+          echo "index.html found successfully"
+
+      - name: Build website
+        run: |
+          echo "Building static website..."
+          mkdir -p build
+          cp index.html build/
+          echo "Build completed successfully"
+
+      - name: Test HTML
+        run: |
+          echo "Running HTML tests..."
+          grep -q "<html" index.html
+          grep -q "</html>" index.html
+          echo "HTML validation passed"
